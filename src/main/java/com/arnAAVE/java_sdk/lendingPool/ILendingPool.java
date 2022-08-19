@@ -2,6 +2,8 @@ package com.arnAAVE.java_sdk.lendingPool;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
+
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -163,6 +165,7 @@ public class ILendingPool extends Contract {
     protected ILendingPool(String contractAddress, Web3j web3j, TransactionManager transactionManager, ContractGasProvider contractGasProvider) {
         super(BINARY, contractAddress, web3j, transactionManager, contractGasProvider);
     }
+
 
     public List<BorrowEventResponse> getBorrowEvents(TransactionReceipt transactionReceipt) {
         List<Contract.EventValuesWithLog> valueList = extractEventParametersWithLog(BORROW_EVENT, transactionReceipt);
