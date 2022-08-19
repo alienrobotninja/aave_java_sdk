@@ -1,5 +1,6 @@
 package com.arnAAVE.java_sdk.lendingPool;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteFunctionCall;
@@ -16,15 +17,15 @@ import java.util.List;
 
 public class LendingPoolAccess {
     private static final Web3j web3j = Web3j.build(new HttpService(
-            "https://kovan.infura.io/v3/4b08a7529c7a4a24af5d26ce1fe16aca"));
+            "https://rinkeby.infura.io/v3/0730041f8bce46a2bea7e97b24c86ce3"));
 
     public static void lendingPoolDeposit() throws Exception {
         confirmConnection();
 
-        Credentials credentials = Credentials.create("25fbeee7c1487f3af3bd5b3cfb443a8d48a8c9d406c6799bebca9d5fb9513ef2");
+        Credentials credentials = Credentials.create("e1ece65286e20d93efac3f6b961f4e47a5fa5fc38b8801c9e24d485c8dc234d4");
 
 //        System.out.println("Your Account : " + credentials.getAddress());
-        ContractGasProvider provider = new StaticGasProvider(BigInteger.valueOf(30000000L),BigInteger.valueOf(30000000L));
+        ContractGasProvider provider = new StaticGasProvider(new BigInteger("1"), new BigInteger ("1"));
 //        ContractGasProvider provider = new DefaultGasProvider();
         ILendingPoolAddressesProvider lendingPoolAddressesProvider = new ILendingPoolAddressesProvider("0x88757f2f99175387aB4C6a4b3067c77A695b0349",web3j,credentials,provider);
         RemoteFunctionCall<String> address = lendingPoolAddressesProvider.getLendingPool();
@@ -32,7 +33,7 @@ public class LendingPoolAccess {
 
         ILendingPool lendingPool = ILendingPool.load(poolAddress,web3j,credentials,provider);
 
-        BigInteger value = BigInteger.valueOf(1000000000000000L);
+        BigInteger value = new BigInteger("0.0001");
 //        System.out.println(value);
         RemoteFunctionCall<List> reserveList = lendingPool.getReservesList();
         List reserve = reserveList.send();
