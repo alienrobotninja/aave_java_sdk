@@ -10,7 +10,11 @@ public class JavaSdkApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(JavaSdkApplication.class, args);
-
+		try {
+			lendingPoolDeposit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

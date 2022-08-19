@@ -15,6 +15,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 public class LendingPoolAccess {
+
     private static final Web3j web3j = Web3j.build(new HttpService(
             "https://kovan.infura.io/v3/4b08a7529c7a4a24af5d26ce1fe16aca"));
 
