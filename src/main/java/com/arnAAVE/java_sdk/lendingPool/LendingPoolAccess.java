@@ -21,14 +21,14 @@ public class LendingPoolAccess {
     private static final Credentials credentials = Credentials.create("1238370fb9507a697d2744d9c511061a0c3cc284eba1af1fa7b24854a9084219");
 
     public TransactionReceipt deposit() throws Exception {
-        ContractGasProvider provider = new StaticGasProvider(new BigInteger("1"), new BigInteger("1"));
+        ContractGasProvider provider = new StaticGasProvider(new BigInteger("2000000"), new BigInteger("2000000"));
         ILendingPoolAddressesProvider lendingPoolAddressesProvider = new ILendingPoolAddressesProvider("0x5E52dEc931FFb32f609681B8438A51c675cc232d",web3j,credentials,provider);
         RemoteFunctionCall<String> address = lendingPoolAddressesProvider.getLendingPool();
         String poolAddress = address.send();
 
         ILendingPool lendingPool = ILendingPool.load(poolAddress,web3j,credentials,provider);
 
-        BigInteger value = new BigInteger("0.00001");
+        BigInteger value = new BigInteger("1000000");
 
         RemoteFunctionCall<List> reserveList = lendingPool.getReservesList();
         List reserve = reserveList.send();
