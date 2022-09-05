@@ -17,12 +17,12 @@ import java.util.List;
 public class LendingPoolAccess {
 
     private static final Web3j web3j = Web3j.build(new HttpService(
-            "https://kovan.infura.io/v3/b8c7cedb8701445bb9210f4731e42c0a"));
+            "https://goerli.infura.io/v3/b8c7cedb8701445bb9210f4731e42c0a"));
     private static final Credentials credentials = Credentials.create("1238370fb9507a697d2744d9c511061a0c3cc284eba1af1fa7b24854a9084219");
 
     public TransactionReceipt deposit() throws Exception {
         ContractGasProvider provider = new StaticGasProvider(new BigInteger("1"), new BigInteger("1"));
-        ILendingPoolAddressesProvider lendingPoolAddressesProvider = new ILendingPoolAddressesProvider("0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",web3j,credentials,provider);
+        ILendingPoolAddressesProvider lendingPoolAddressesProvider = new ILendingPoolAddressesProvider("0x5E52dEc931FFb32f609681B8438A51c675cc232d",web3j,credentials,provider);
         RemoteFunctionCall<String> address = lendingPoolAddressesProvider.getLendingPool();
         String poolAddress = address.send();
 
@@ -34,7 +34,7 @@ public class LendingPoolAccess {
         List reserve = reserveList.send();
         System.out.println(reserve);
 
-        RemoteFunctionCall<TransactionReceipt> deposit = lendingPool.deposit("0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9", value, "0x16B72adaB628D8762A25f707aCbfE9c170d9001dl", BigInteger.valueOf(0));
+        RemoteFunctionCall<TransactionReceipt> deposit = lendingPool.deposit("0x16B72adaB628D8762A25f707aCbfE9c170d9001d", value, "0x16B72adaB628D8762A25f707aCbfE9c170d9001d", BigInteger.valueOf(0));
 
         return deposit.send();
     }
