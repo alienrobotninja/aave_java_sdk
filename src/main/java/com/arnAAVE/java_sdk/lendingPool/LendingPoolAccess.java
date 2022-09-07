@@ -1,11 +1,13 @@
 package com.arnAAVE.java_sdk.lendingPool;
 
 
+import org.modelmapper.ModelMapper;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
@@ -15,12 +17,16 @@ import java.math.BigInteger;
 import java.util.List;
 
 public class LendingPoolAccess {
+    private Web3j web3j = null;
+
+    private ModelMapper mapper = new ModelMapper();
 
     private final Credentials credentials = Credentials.create("25fbeee7c1487f3af3bd5b3cfb443a8d48a8c9d406c6799bebca9d5fb9513ef2");
 
     private final ContractGasProvider provider = new StaticGasProvider(new BigInteger("2000000"),new BigInteger("3000000"));
 
-    TransactionReceipt lendingPoolDeposit(Web3j web3j) throws Exception {
+    TransactionReceipt lendingPoolDeposit(String url) throws Exception {
+        Web3j web3j = Web3j.build(new HttpService(url));
         ILendingPoolAddressesProvider lendingPoolAddressesProvider = new ILendingPoolAddressesProvider("0x5E52dEc931FFb32f609681B8438A51c675cc232d",web3j,credentials,provider);
         RemoteFunctionCall<String> address = lendingPoolAddressesProvider.getLendingPool();
         String poolAddress = address.send();
@@ -42,30 +48,30 @@ public class LendingPoolAccess {
         return lendingPool.getDepositEvents(transactionReceipt);
     }
 
-    private static void loadReservedData(ILendingPool lendingPool) throws Exception {
-        ILendingPool.ReserveData assetReserve = lendingPool.getReserveData("0xb7c325266ec274feb1354021d27fa3e3379d840d").send();
-        System.out.println("aTokenAddress:" + assetReserve.aTokenAddress);
-        System.out.println("The id: " + assetReserve.id);
-        System.out.println("Last updated at: " + assetReserve.lastUpdateTimestamp);
+    ReserveData loadReservedData(String url) throws Exception {
+        web3j = Web3j.build(new HttpService(url));
+        ILendingPoolAddressesProvider lendingPoolAddressesProvider = new ILendingPoolAddressesProvider("0x5E52dEc931FFb32f609681B8438A51c675cc232d",web3j,credentials,provider);
+        RemoteFunctionCall<String> address = lendingPoolAddressesProvider.getLendingPool();
+        String poolAddress = address.send();
 
+        ILendingPool lendingPool = ILendingPool.load(poolAddress,web3j,credentials,provider);
 
-
+        return mapper.map(lendingPool.getReserveData("0xb7c325266ec274feb1354021d27fa3e3379d840d").send(), ReserveData.class);
     }
 
-    public static void  lendingPoolWithdraw(Web3j web3j) throws Exception {
+    TransactionReceipt lendingPoolWithdraw(String url) throws Exception {
+        Web3j web3j = Web3j.build(new HttpService(url));
         BigInteger value = BigInteger.valueOf(1);
         //for development reasons I'm leaving this private key here it's a testnet key
-        Credentials credentials = Credentials.create("25fbeee7c1487f3af3bd5b3cfb443a8d48a8c9d406c6799bebca9d5fb9513ef2");
 
-        ContractGasProvider provider = new StaticGasProvider(BigInteger.valueOf(40000000L),BigInteger.valueOf(30000000L));
         ILendingPoolAddressesProvider lendingPoolAddressesProvider = new ILendingPoolAddressesProvider("0x88757f2f99175387aB4C6a4b3067c77A695b0349",web3j,credentials,provider);
         RemoteFunctionCall<String> address = lendingPoolAddressesProvider.getLendingPool();
         String poolAddress = address.send();
 
         ILendingPool lendingPool = ILendingPool.load(poolAddress,web3j,credentials,provider);
-        TransactionReceipt z = lendingPool.withdraw("0x9d2446bf688fcc0776333069D82CA9F3328518e1",value,"0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe").send();
-        System.out.println(z.getTransactionHash());
+        return lendingPool.withdraw("0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e",value,"0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e").send();
     }
+
     public static void lendingPoolBurrow(Web3j web3j){
         BigInteger value = BigInteger.valueOf(0);
         Credentials credentials = Credentials.create("25fbeee7c1487f3af3bd5b3cfb443a8d48a8c9d406c6799bebca9d5fb9513ef2");
