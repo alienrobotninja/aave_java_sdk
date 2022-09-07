@@ -9,12 +9,12 @@ import static com.arnAAVE.java_sdk.lendingPool.LendingPoolAccess.lendingPoolDepo
 public class JavaSdkApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(JavaSdkApplication.class, args);
-		try {
-			lendingPoolDeposit();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+//		SpringApplication.run(JavaSdkApplication.class, args);
+//		try {
+//			lendingPoolDeposit();
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
 	}
 
 }
