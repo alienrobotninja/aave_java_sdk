@@ -19,7 +19,7 @@ import java.util.List;
 public class LendingPoolAccess {
     private Web3j web3j = null;
 
-    private ModelMapper mapper = new ModelMapper();
+    private final ModelMapper mapper = new ModelMapper();
 
     private final Credentials credentials = Credentials.create("25fbeee7c1487f3af3bd5b3cfb443a8d48a8c9d406c6799bebca9d5fb9513ef2");
 
@@ -72,7 +72,8 @@ public class LendingPoolAccess {
         return lendingPool.withdraw("0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e",value,"0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e").send();
     }
 
-    public static void lendingPoolBurrow(Web3j web3j){
+    void lendingPoolBurrow(String url){
+        Web3j web3j = Web3j.build(new HttpService(url));
         BigInteger value = BigInteger.valueOf(0);
         Credentials credentials = Credentials.create("25fbeee7c1487f3af3bd5b3cfb443a8d48a8c9d406c6799bebca9d5fb9513ef2");
         System.out.println("Your Account : " + credentials.getAddress());
@@ -96,5 +97,16 @@ public class LendingPoolAccess {
         }
         assert clientVersion != null;
         System.out.println("Client version: " + clientVersion.getWeb3ClientVersion());
+    }
+
+    void lendingPoolRepay(String url){
+        Web3j web3j = Web3j.build(new HttpService(url));
+        BigInteger value = BigInteger.valueOf(0);
+        Credentials credentials = Credentials.create("25fbeee7c1487f3af3bd5b3cfb443a8d48a8c9d406c6799bebca9d5fb9513ef2");
+        System.out.println("Your Account : " + credentials.getAddress());
+        ContractGasProvider provider = new DefaultGasProvider();
+        ILendingPool lendingPool = new ILendingPool("0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe",web3j,credentials,provider );
+
+        lendingPool.repay("")
     }
 }

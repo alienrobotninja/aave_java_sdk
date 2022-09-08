@@ -1,14 +1,9 @@
 package com.arnAAVE.java_sdk.lendingPool;
 
 import org.junit.jupiter.api.Test;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.http.HttpService;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LendingPoolAccessTest {
     LendingPoolAccess lendingPool = new LendingPoolAccess();
@@ -56,6 +51,14 @@ class LendingPoolAccessTest {
 
     @Test
     void lendingPoolBurrow() {
+        String nodeUrl = "https://goerli.infura.io/v3/4b08a7529c7a4a24af5d26ce1fe16aca";
+
+        try {
+            lendingPool.lendingPoolBurrow(nodeUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        assertTrue();
     }
 
     @Test
