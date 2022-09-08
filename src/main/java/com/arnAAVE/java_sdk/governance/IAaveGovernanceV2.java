@@ -1,4 +1,4 @@
-package com.arnAAVE.java_sdk.contractModels;
+package com.arnAAVE.java_sdk.governance;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
