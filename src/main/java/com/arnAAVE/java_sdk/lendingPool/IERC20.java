@@ -1,4 +1,4 @@
-package com.arnAAVE.java_sdk.contractModels;
+package com.arnAAVE.java_sdk.lendingPool;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;

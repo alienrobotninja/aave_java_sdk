@@ -1,20 +1,25 @@
 package com.arnAAVE.java_sdk.lendingPool;
 
 import org.junit.jupiter.api.Test;
+import org.web3j.crypto.Credentials;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class LendingPoolAccessTest {
-    LendingPoolAccess lendingPool = new LendingPoolAccess();
+class LendingPoolTest {
+
 
     @Test
     void lendingPoolDeposit() {
         String nodeUrl = "https://goerli.infura.io/v3/4b08a7529c7a4a24af5d26ce1fe16aca";
-        TransactionReceipt depositReceipt = new TransactionReceipt();
+        String privateKey = "25fbeee7c1487f3af3bd5b3cfb443a8d48a8c9d406c6799bebca9d5fb9513ef2";
 
+        TransactionReceipt depositReceipt = new TransactionReceipt();
+        AaveConnect connection = new AaveConnect(privateKey,nodeUrl);
+
+        LendingPool lendingPool = new LendingPool(connection,);
         try {
-            depositReceipt = lendingPool.lendingPoolDeposit(nodeUrl);
+            depositReceipt = lendingPool.deposit("10000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC","0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e");
         } catch (Exception e) {
             e.printStackTrace();
         }
