@@ -1,16 +1,12 @@
 package com.arnAAVE.java_sdk.lendingPool;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteFunctionCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.ContractGasProvider;
-import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 
 import java.math.BigInteger;
@@ -56,14 +52,12 @@ public class LendingPool {
         return lendingPool.getDepositEvents(transactionReceipt);
     }
 
-    ReserveData loadReservedData(String url) throws Exception {
-        ILendingPoolAddressesProvider lendingPoolAddressesProvider = new ILendingPoolAddressesProvider("0x5E52dEc931FFb32f609681B8438A51c675cc232d",connection.getWeb3j(),connection.getCredentials(),provider);
-        RemoteFunctionCall<String> address = lendingPoolAddressesProvider.getLendingPool();
-        String poolAddress = address.send();
+    ReserveData loadReservedData(String assetAddress) throws Exception {
+        String poolAddress = lendingPoolAddress.getLendingPool().send();
 
         ILendingPool lendingPool = ILendingPool.load(poolAddress,connection.getWeb3j(),connection.getCredentials(),provider);
 
-        return mapper.map(lendingPool.getReserveData("0xb7c325266ec274feb1354021d27fa3e3379d840d").send(), ReserveData.class);
+        return mapper.map(lendingPool.getReserveData(assetAddress).send(), ReserveData.class);
     }
 
     TransactionReceipt withdraw(String amount, String assetAddress, String toAddress) throws Exception {
@@ -90,12 +84,12 @@ public class LendingPool {
         return lendingPool.repay(assetAddress,value,BigInteger.ONE,onBehalfOf).send();
     }
 
-//    TransactionReceipt repay(String amount, String assetAddress, String onBehalfOf) throws Exception {
-//        String poolAddress = lendingPoolAddress.getLendingPool().send();
-//        BigInteger value = new BigInteger(amount);
-//
-//        ILendingPool lendingPool = ILendingPool.load(poolAddress,connection.getWeb3j(),connection.getCredentials(),provider);
-//        return lendingPool.repay(assetAddress,value,BigInteger.ONE,onBehalfOf).send();
-//    }
+    TransactionReceipt swapBorrowRate(String amount, String assetAddress, String onBehalfOf) throws Exception {
+        String poolAddress = lendingPoolAddress.getLendingPool().send();
+        BigInteger value = new BigInteger(amount);
+
+        ILendingPool lendingPool = ILendingPool.load(poolAddress,connection.getWeb3j(),connection.getCredentials(),provider);
+        return lendingPool.swapBorrowRateMode(assetAddress,BigInteger.ONE).send();
+    }
 
 }

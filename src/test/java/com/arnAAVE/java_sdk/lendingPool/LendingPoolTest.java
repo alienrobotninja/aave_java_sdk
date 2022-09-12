@@ -96,17 +96,16 @@ class LendingPoolTest {
         System.out.println(repayReceipt.getTransactionHash());
     }
 
-//    @Test
-//    void loadReservedData() {
-//        String nodeUrl = "https://goerli.infura.io/v3/4b08a7529c7a4a24af5d26ce1fe16aca";
-//
-//        try {
-//            ReserveData assetReserve = lendingPool.loadReservedData(nodeUrl);
-//            System.out.println("aTokenAddress:" + assetReserve.aTokenAddress);
-//            System.out.println("The id: " + assetReserve.id);
-//            System.out.println("Last updated at: " + assetReserve.lastUpdateTimestamp);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @Test
+    void loadReservedData() {
+
+        try {
+            ReserveData assetReserve = lendingPool.loadReservedData("0x075a36ba8846c6b6f53644fdd3bf17e5151789dc");
+            System.out.println("aTokenAddress:" + assetReserve.aTokenAddress);
+            System.out.println("The id: " + assetReserve.id);
+            System.out.println("Last updated at: " + assetReserve.lastUpdateTimestamp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
