@@ -92,4 +92,19 @@ public class LendingPool {
         return lendingPool.swapBorrowRateMode(assetAddress,BigInteger.ONE).send();
     }
 
+    public TransactionReceipt setUsageAsCollateral(String asset, Boolean useAsCollateral) throws Exception {
+        String poolAddress = lendingPoolAddress.getLendingPool().send();
+        BigInteger value = new BigInteger(asset);
+
+        ILendingPool lendingPool = ILendingPool.load(poolAddress,connection.getWeb3j(),connection.getCredentials(),provider);
+        return lendingPool.setUserUseReserveAsCollateral(asset, useAsCollateral).send();
+    }
+
+    public TransactionReceipt liquidationCall(String collateralAsset, String debtAsset, String user, String debtToCover, Boolean receiveAToken) throws Exception {
+        String poolAddress = lendingPoolAddress.getLendingPool().send();
+        BigInteger value = new BigInteger(debtToCover);
+
+        ILendingPool lendingPool = ILendingPool.load(poolAddress,connection.getWeb3j(),connection.getCredentials(),provider);
+        return lendingPool.liquidationCall(collateralAsset,debtAsset,user,value,receiveAToken).send();
+    }
 }
