@@ -4,10 +4,14 @@
 ### prerequisite
 * add ***JDK 'azul-16'***  as the project sdk
 * have maven installed
+* get an infura goerli or kovan test node
+* have a goerli or kovan testnet wallet (can easily be gotten from metamask)
+* and load with some test eth.
+* look in the test to understand how to use.
 ### Installation
 just clone and ***mvn install*** from the terminal to add the web3j dependency then run the main in app.java
 
-Look in the pom.xml to understand the dependency and the plugin but the plugin seems to not be working yet.
+Look in the pom.xml to understand the dependency and the plugin.
 
 
 ###Todo
@@ -26,12 +30,15 @@ Look in the pom.xml to understand the dependency and the plugin but the plugin s
 * The error in number three above has been resolved we left with finding a way to get the solidity contracts and create the wrapper classes.
 
 ##Known AAVE RPC nodes
-*
-``https://eth-mainnet.alchemyapi.io/v2/demo``
 
+``https://eth-mainnet.alchemyapi.io/v2/demo``
+just get a testnet address from infura and you are good to go.
 #Update
 * wrapper classes have been created using the v2 .sol contracts.
 * attempting to deposit on lending pool.
-* currently, stuck at verifying the amount to send and how to fulfill the deposit Params.
+* we require an approve method for deposit to go through still finding away around that.
 ###lending pool contract
 * deposit(``String reserve``,``BigInteger amount``,``String onBehalfOf``,``BigInteger referralCode``)
+
+
+* please once again look in the test to understand how to use.
