@@ -24,10 +24,10 @@ public class LendingPool {
 
     private ILendingPoolAddressesProvider lendingPoolAddress;
 
-    public LendingPool(AaveConnect connection, String lendingPoolAddressProvider) {
+    public LendingPool(AaveConnect connection, String lendingPoolAddressProvider, String gasFee) {
         this.connection = connection;
         this.lendingPoolAddressProvider = lendingPoolAddressProvider;
-        this.provider = new StaticGasProvider(new BigInteger("2000000"),new BigInteger("3000000"));
+        this.provider = new StaticGasProvider(new BigInteger(gasFee),new BigInteger("3000000"));
         this.lendingPoolAddress = new ILendingPoolAddressesProvider(lendingPoolAddressProvider,connection.getWeb3j(),connection.getCredentials(),provider);
     }
 

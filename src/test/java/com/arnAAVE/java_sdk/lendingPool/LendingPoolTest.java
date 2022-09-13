@@ -21,7 +21,7 @@ class LendingPoolTest {
 
         connection = new AaveConnect(privateKey,nodeUrl);
 
-        lendingPool = new LendingPool(connection, "0x5E52dEc931FFb32f609681B8438A51c675cc232d");
+        lendingPool = new LendingPool(connection, "0x5E52dEc931FFb32f609681B8438A51c675cc232d","200000");
     }
 
     @Test
@@ -29,6 +29,24 @@ class LendingPoolTest {
         log.info("client version -> {}", connection.getClientVersion());
 //        System.out.println("Client version " + connection.getClientVersion());
         assertTrue(connection.getClientVersion().contains("Geth"));
+    }
+    @Test
+    void protocolDataProvider(){
+        ProtocolDataProvider dataProvider = new ProtocolDataProvider();
+    }
+
+    @Test
+    void testApprove(){
+        Erc20 erc20 = new Erc20(connection,"2000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC");
+        TransactionReceipt erc20Receipt = new TransactionReceipt();
+        try {
+            erc20Receipt = erc20.approve("10000000");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Transaction hash: " + erc20Receipt.getTransactionHash());
+        System.out.println("The transaction address: " + erc20Receipt.getContractAddress());
+        System.out.println("The gas used: " + erc20Receipt.getGasUsed());
     }
 
 
