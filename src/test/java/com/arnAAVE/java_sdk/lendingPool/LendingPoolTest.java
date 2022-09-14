@@ -118,4 +118,9 @@ class LendingPoolTest {
     void liquidationCall(){
 
     }
+
+    @Test
+    void flashloans(){
+
+    }
 }
