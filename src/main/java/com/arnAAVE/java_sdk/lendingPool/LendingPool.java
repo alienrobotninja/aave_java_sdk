@@ -24,10 +24,10 @@ public class LendingPool {
 
     private ILendingPoolAddressesProvider lendingPoolAddress;
 
-    public LendingPool(AaveConnect connection, String lendingPoolAddressProvider, String gasFee) {
+    public LendingPool(AaveConnect connection, String lendingPoolAddressProvider, String gasFee, String gasLimit) {
         this.connection = connection;
         this.lendingPoolAddressProvider = lendingPoolAddressProvider;
-        this.provider = new StaticGasProvider(new BigInteger(gasFee),new BigInteger("3000000"));
+        this.provider = new StaticGasProvider(new BigInteger(gasFee),new BigInteger(gasLimit));
         this.lendingPoolAddress = new ILendingPoolAddressesProvider(lendingPoolAddressProvider,connection.getWeb3j(),connection.getCredentials(),provider);
     }
 
@@ -39,8 +39,7 @@ public class LendingPool {
 //        IWETHGateway weth = new IWETHGateway("0xEFFC18fC3b7eb8E676dac549E0c693ad50D1Ce31",web3j,credentials,provider);
 //        weth.depositETH(poolAddress,"0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e",BigInteger.ZERO);
 
-        RemoteFunctionCall<TransactionReceipt> deposit = lendingPool.deposit(assetAddress, value, onBehalfOf, BigInteger.valueOf(0));
-        return deposit.send();
+        return lendingPool.deposit(assetAddress, value, onBehalfOf, BigInteger.valueOf(0)).send();
     }
 
     List<ILendingPool.DepositEventResponse> depositEvents(Web3j web3j, TransactionReceipt transactionReceipt) throws Exception {
@@ -81,6 +80,7 @@ public class LendingPool {
         BigInteger value = new BigInteger(amount);
 
         ILendingPool lendingPool = ILendingPool.load(poolAddress,connection.getWeb3j(),connection.getCredentials(),provider);
+       
         return lendingPool.repay(assetAddress,value,BigInteger.ONE,onBehalfOf).send();
     }
 

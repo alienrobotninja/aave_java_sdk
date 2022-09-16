@@ -21,7 +21,7 @@ class LendingPoolTest {
 
         connection = new AaveConnect(privateKey,nodeUrl);
 
-        lendingPool = new LendingPool(connection, "0x5E52dEc931FFb32f609681B8438A51c675cc232d","200000");
+        lendingPool = new LendingPool(connection, "0x5E52dEc931FFb32f609681B8438A51c675cc232d","200000","3000000");
     }
 
     @Test
@@ -32,12 +32,18 @@ class LendingPoolTest {
     }
     @Test
     void protocolDataProvider(){
-        ProtocolDataProvider dataProvider = new ProtocolDataProvider();
+        ProtocolDataProvider dataProvider = new ProtocolDataProvider(connection,"0x5E52dEc931FFb32f609681B8438A51c675cc232d","2000000");
+
+        try {
+            System.out.println(dataProvider.getAllATokens());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     void testApprove(){
-        Erc20 erc20 = new Erc20(connection,"2000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC");
+        Erc20 erc20 = new Erc20(connection,"2000000","0x9fd21be27a2b059a288229361e2fa632d8d2d074");
         TransactionReceipt erc20Receipt = new TransactionReceipt();
         try {
             erc20Receipt = erc20.approve("10000000");
