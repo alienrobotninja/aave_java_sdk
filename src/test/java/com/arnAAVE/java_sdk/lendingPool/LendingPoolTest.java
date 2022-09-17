@@ -43,7 +43,7 @@ class LendingPoolTest {
 
     @Test
     void testApprove(){
-        Erc20 erc20 = new Erc20(connection,"2000000","0x9fd21be27a2b059a288229361e2fa632d8d2d074");
+        Erc20 erc20 = new Erc20(connection,"2000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC");
         TransactionReceipt erc20Receipt = new TransactionReceipt();
         try {
             erc20Receipt = erc20.approve("10000000");
@@ -58,6 +58,17 @@ class LendingPoolTest {
 
     @Test
     void lendingPoolDeposit() {
+        Erc20 erc20 = new Erc20(connection,"2000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC");
+        TransactionReceipt erc20Receipt = new TransactionReceipt();
+        try {
+            erc20Receipt = erc20.approve("10000000");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        log.info("Approve hash -{} ", erc20Receipt.getTransactionHash());
+        log.info("Approve address: " + erc20Receipt.getContractAddress());
+        log.info("Approve gas used: " + erc20Receipt.getGasUsed());
+
         TransactionReceipt depositReceipt = new TransactionReceipt();
 
         try {
@@ -66,18 +77,15 @@ class LendingPoolTest {
             e.printStackTrace();
         }
 
-//        try {
-//            System.out.println(lendingPool.depositEvents(web3j, depositReceipt));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            log.info("the list is - {} ",lendingPool.depositEvents(connection.getWeb3j(), depositReceipt));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        System.out.println("Transaction hash: " + depositReceipt.getTransactionHash());
-        System.out.println("The transaction address: " + depositReceipt.getContractAddress());
-        System.out.println("The gas used: " + depositReceipt.getGasUsed());
-
-//        List<ILendingPool.DepositEventResponse> depositEvent = lendingPool.getDepositEvents(depositReceipt);
-//        System.out.println(depositEvent);
+        log.info("Deposit hash: " + depositReceipt.getTransactionHash());
+        log.info("Deposit address: " + depositReceipt.getContractAddress());
+        log.info("Deposit gas used: " + depositReceipt.getGasUsed());
     }
 
     @Test
