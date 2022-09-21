@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
@@ -21,7 +20,7 @@ class LendingPoolTest {
 
         connection = new AaveConnect(privateKey,nodeUrl);
 
-        lendingPool = new LendingPool(connection, "0x5E52dEc931FFb32f609681B8438A51c675cc232d","200000","3000000");
+        lendingPool = new LendingPool(connection, "0x5E52dEc931FFb32f609681B8438A51c675cc232d","20000000","30000000");
     }
 
     @Test
@@ -53,26 +52,30 @@ class LendingPoolTest {
         System.out.println("Transaction hash: " + erc20Receipt.getTransactionHash());
         System.out.println("The transaction address: " + erc20Receipt.getContractAddress());
         System.out.println("The gas used: " + erc20Receipt.getGasUsed());
+
     }
 
+    @Test
+    void testWethGateway() {
+//        WethGateway weth = new WethGateway(connection,"0x3bd3a20Ac9Ff1dda1D99C0dFCE6D65C4960B3627","2000000","3000000");
+        WethGateway weth = new WethGateway(connection,"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2","2000000","3000000");
+
+        try {
+            weth.depositEth("0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e","0x4bd5643ac6f66a5237E18bfA7d47cF22f1c9F210");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     void lendingPoolDeposit() {
         Erc20 erc20 = new Erc20(connection,"2000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC");
-        TransactionReceipt erc20Receipt = new TransactionReceipt();
-        try {
-            erc20Receipt = erc20.approve("10000000");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        log.info("Approve hash -{} ", erc20Receipt.getTransactionHash());
-        log.info("Approve address: " + erc20Receipt.getContractAddress());
-        log.info("Approve gas used: " + erc20Receipt.getGasUsed());
 
         TransactionReceipt depositReceipt = new TransactionReceipt();
 
         try {
-            depositReceipt = lendingPool.deposit("10000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC","0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e");
+            erc20.approve("100000000000");
+            depositReceipt = lendingPool.deposit("100000000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC","0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e");
         } catch (Exception e) {
             e.printStackTrace();
         }

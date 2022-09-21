@@ -35,9 +35,6 @@ public class LendingPool {
         String poolAddress = lendingPoolAddress.getLendingPool().send();
         ILendingPool lendingPool = ILendingPool.load(poolAddress,connection.getWeb3j(),connection.getCredentials(),provider);
         BigInteger value = new BigInteger(amount);
-        
-//        IWETHGateway weth = new IWETHGateway("0xEFFC18fC3b7eb8E676dac549E0c693ad50D1Ce31",web3j,credentials,provider);
-//        weth.depositETH(poolAddress,"0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e",BigInteger.ZERO);
 
         return lendingPool.deposit(assetAddress, value, onBehalfOf, BigInteger.valueOf(0)).send();
     }
