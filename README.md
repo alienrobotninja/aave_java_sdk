@@ -69,29 +69,41 @@ deposited, a corresponding amount of aTokens is minted
 <details>
   <summary>Sample Code</summary>
 
-```ts
-import { LendingPool } from '@aave/contract-helpers';
-
-const lendingPool = new LendingPool(provider, {
-  LENDING_POOL: lendingPoolAddress,
-  WETH_GATEWAY: wethGatewayAddress,
-});
-
+```java
 /*
-- @param `user` The ethereum address that will make the deposit 
-- @param `reserve` The ethereum address of the reserve 
-- @param `amount` The amount to be deposited 
-- @param @optional `onBehalfOf` The ethereum address for which user is depositing. It will default to the user address
+- @param `assetAddress` The ethereum address of the reserve asset
+- @param `lendingPoolAddressProvider` lending pool address provider 
+- @param `amount` The amount to be deposited, in human readable units as strings (e.g. 25000000000 ETH) 
+- @param `interestRateMode`//Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate
+- @param `onBehalfOf` The ethereum address for which user is depositing.
 */
-const txs: EthereumTransactionTypeExtended[] = await lendingPool.deposit({
-  user,
-  reserve,
-  amount,
-  onBehalfOf,
-});
-```
+class LendingPoolTest {
+    //check that you are on the right network 
+    //NB kovan and other test nets are deprecated use Goerli
+    String nodeUrl 
+        = "https://goerli.infura.io/v3/<replace with your infura key>";
+    String privateKey 
+        = "<replace with your private key to your wallet>";
+    
+    private AaveConnect connection = new AaveConnect(privateKey, nodeUrl);
+    
+    private LendingPool lendingPool = new LendingPool(connection, lendingPoolAddressProvider, gasFee, gasLimit);
 
-Submit transaction(s) as shown [here](#submitting-transactions)
+    /* rest of your code... constructor...*/
+
+    void lendingPoolDeposit() {
+        Erc20 erc20 = new Erc20(connection, amount, assetAddress);
+
+        try {
+            erc20.approve(amount);
+            TransactionReceipt depositReceipt = lendingPool.deposit(amount, assetAddress, onBehalfOf);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       
+    }
+}
+```
 
 </details>
 
@@ -107,34 +119,38 @@ User must have a collaterised position (i.e. aTokens in their wallet)
 <details>
   <summary>Sample Code</summary>
 
-```ts
-import { LendingPool, InterestRate } from '@aave/contract-helpers';
-
-const lendingPool = new LendingPool(provider, {
-  LENDING_POOL: lendingPoolAddress,
-  WETH_GATEWAY: wethGatewayAddress,
-});
-
+```java
 /*
-- @param `user` The ethereum address that will receive the borrowed amount 
-- @param `reserve` The ethereum address of the reserve asset 
-- @param `amount` The amount to be borrowed, in human readable units (e.g. 2.5 ETH) 
+- @param `assetAddress` The ethereum address of the reserve asset 
+- @param `amount` The amount to be borrowed, in human readable units as strings (e.g. 25000000000 ETH) 
 - @param `interestRateMode`//Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate
-- @param @optional `debtTokenAddress` The ethereum address of the debt token of the asset you want to borrow. Only needed if the reserve is ETH mock address 
-- @param @optional `onBehalfOf` The ethereum address for which user is borrowing. It will default to the user address 
+- @param `lendingPoolAddressProvider` lending pool address provider 
+- @param `onBehalfOf` The ethereum address for which user is borrowing. It will default to the user address 
 */
-const txs: EthereumTransactionTypeExtended[] = await lendingPool.borrow({
-  user,
-  reserve,
-  amount,
-  interestRateMode,
-  debtTokenAddress,
-  onBehalfOf,
-  referralCode,
-});
-```
 
-Submit transaction as shown [here](#submitting-transactions)
+class LendingPoolTest {
+    String nodeUrl
+        = "https://goerli.infura.io/v3/<replace with your infura key>";
+    String privateKey
+        = "<replace with your private key to your wallet>";
+
+    private AaveConnect connection = new AaveConnect(privateKey, nodeUrl);
+
+    private LendingPool lendingPool = new LendingPool(connection, lendingPoolAddressProvider, gasFee, gasLimit);
+
+    /* rest of your code... constructor...*/
+    
+    void lendingPoolWithdraw() {
+
+        try {
+            TransactionReceipt borrowReceipt =  lendingPool.borrow(amount, assetAddress, onBehalfOf);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+     }
+}
+
+```
 
 </details>
 
@@ -152,31 +168,38 @@ If the `user` is not approved, an approval transaction will also be returned
 <details>
   <summary>Sample Code</summary>
 
-```ts
-import { LendingPool, InterestRate } from '@aave/contract-helpers';
-
-const lendingPool = new LendingPool(provider, {
-  LENDING_POOL: lendingPoolAddress,
-  WETH_GATEWAY: wethGatewayAddress,
-});
-
+```java
 /*
-- @param `user` The ethereum address that repays 
-- @param `reserve` The ethereum address of the reserve on which the user borrowed 
-- @param `amount` The amount to repay, or (-1) if the user wants to repay everything 
-- @param `interestRateMode` // Whether stable (InterestRate.Stable) or variable (InterestRate.Variable) debt will be repaid
-- @param @optional `onBehalfOf` The ethereum address for which user is repaying. It will default to the user address
+- @param `assetAddress` The ethereum address of the reserve asset 
+- @param `amount` The amount to be borrowed, in human readable units as strings (e.g. 25000000000 ETH) 
+- @param `interestRateMode`//Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate
+- @param `lendingPoolAddressProvider` lending pool address provider 
+- @param `onBehalfOf` The ethereum address for which user is borrowing. It will default to the user address 
 */
-const txs: EthereumTransactionTypeExtended[] = lendingPool.repay({
-  user,
-  reserve,
-  amount,
-  interestRateMode,
-  onBehalfOf,
-});
-```
 
-Submit transaction(s) as shown [here](#submitting-transactions)
+class LendingPoolTest {
+    String nodeUrl
+        = "https://goerli.infura.io/v3/<replace with your infura key>";
+    String privateKey
+        = "<replace with your private key to your wallet>";
+
+    private AaveConnect connection = new AaveConnect(privateKey, nodeUrl);
+
+    private LendingPool lendingPool = new LendingPool(connection, lendingPoolAddressProvider, gasFee, gasLimit);
+
+    /* rest of your code... constructor...*/
+    
+    void lendingPoolWithdraw() {
+
+        try {
+            TransactionReceipt repayReceipt =  lendingPool.repay(amount, assetAddress, onBehalfOf);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+     }
+}
+
+```
 
 </details>
 
@@ -189,31 +212,38 @@ Withdraws the underlying asset of an aToken asset.
 <details>
   <summary>Sample Code</summary>
 
-```ts
-import { LendingPool } from '@aave/contract-helpers';
-
-const lendingPool = new LendingPool(provider, {
-  LENDING_POOL: lendingPoolAddress,
-  WETH_GATEWAY: wethGatewayAddress,
-});
-
+```java
 /*
-- @param `user` The ethereum address that will receive the aTokens 
-- @param `reserve` The ethereum address of the reserve asset 
-- @param `amount` The amount of aToken being redeemed 
-- @param @optional `aTokenAddress` The ethereum address of the aToken. Only needed if the reserve is ETH mock address 
-- @param @optional `onBehalfOf` The amount of aToken being redeemed. It will default to the user address
+- @param `assetAddress` The ethereum address of the reserve asset 
+- @param `amount` The amount to be withdrawn, in human readable units as strings (e.g. 25000000000 ETH) 
+- @param `interestRateMode`//Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate
+- @param `lendingPoolAddressProvider` lending pool address provider 
+- @param `toAddress` The ethereum address for which user is borrowing. It will default to the user address 
 */
-const txs: EthereumTransactionTypeExtended[] = lendingPool.withdraw({
-  user,
-  reserve,
-  amount,
-  aTokenAddress,
-  onBehalfOf,
-});
-```
 
-Submit transaction as shown [here](#submitting-transactions)
+class LendingPoolTest {
+    String nodeUrl
+        = "https://goerli.infura.io/v3/<replace with your infura key>";
+    String privateKey
+        = "<replace with your private key to your wallet>";
+
+    private AaveConnect connection = new AaveConnect(privateKey, nodeUrl);
+
+    private LendingPool lendingPool = new LendingPool(connection, lendingPoolAddressProvider, gasFee, gasLimit);
+
+    /* rest of your code... constructor...*/
+
+    void lendingPoolWithdraw() {
+
+        try {
+            TransactionReceipt withDrawReceipt =  lendingPool.withdraw(amount, assetAddress, toAdderess);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+```
 
 </details>
 
@@ -227,26 +257,32 @@ modes.
 <details>
   <summary>Sample Code</summary>
 
-```ts
-import { LendingPool, InterestRate } from '@aave/contract-helpers';
-
-const lendingPool = new LendingPool(provider, {
-  LENDING_POOL: lendingPoolAddress,
-});
-
+```java
 /*
-- @param `user` The ethereum address that wants to swap rate modes 
-- @param `reserve` The address of the reserve on which the user borrowed 
-- @param `interestRateMode` //Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate
+- @param `assetAddress` The address of the reserve on which the user borrowed 
+- @param `mode` //Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate which is either "1" for stable or "2" for variable
 */
-const txs: EthereumTransactionTypeExtended[] = lendingPool.swapBorrowRateMode({
-  user,
-  reserve,
-  interestRateMode,
-});
-```
+class LendingPoolTest {
+    String nodeUrl
+        = "https://goerli.infura.io/v3/<replace with your infura key>";
+    String privateKey
+        = "<replace with your private key to your wallet>";
 
-Submit transaction as shown [here](#submitting-transactions)
+    private AaveConnect connection = new AaveConnect(privateKey, nodeUrl);
+
+    private LendingPool lendingPool = new LendingPool(connection, lendingPoolAddressProvider, gasFee, gasLimit);
+
+    /* rest of your code... constructor...*/
+
+    void swapBorrowRate() {
+        try {
+            TransactionReceipt swapBorrowRateReceipt =  lendingPool.swapBorrowRate(assetAddress, mode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
 
 </details>
 
