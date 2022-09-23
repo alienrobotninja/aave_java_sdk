@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
@@ -53,7 +55,9 @@ class LendingPoolTest {
         System.out.println("The transaction address: " + erc20Receipt.getContractAddress());
         System.out.println("The gas used: " + erc20Receipt.getGasUsed());
 
+
     }
+
 
     @Test
     void testWethGateway() {
@@ -129,6 +133,18 @@ class LendingPoolTest {
             e.printStackTrace();
         }
         System.out.println(repayReceipt.getTransactionHash());
+    }
+
+    @Test
+    void testSwapBorrowRate(){
+        TransactionReceipt rateReceipt = new TransactionReceipt();
+
+        try {
+            rateReceipt = lendingPool.swapBorrowRate("0xCCa7d1416518D095E729904aAeA087dBA749A4dC", "1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(rateReceipt.getTransactionHash());
     }
 
     @Test

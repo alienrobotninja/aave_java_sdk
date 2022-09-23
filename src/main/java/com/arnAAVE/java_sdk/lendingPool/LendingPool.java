@@ -9,6 +9,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 
+import java.awt.geom.Point2D;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -81,12 +82,13 @@ public class LendingPool {
         return lendingPool.repay(assetAddress,value,BigInteger.ONE,onBehalfOf).send();
     }
 
-    TransactionReceipt swapBorrowRate(String amount, String assetAddress, String onBehalfOf) throws Exception {
+    TransactionReceipt swapBorrowRate(String assetAddress, String mode) throws Exception {
         String poolAddress = lendingPoolAddress.getLendingPool().send();
-        BigInteger value = new BigInteger(amount);
+        BigInteger value = new BigInteger(mode);
 
         ILendingPool lendingPool = ILendingPool.load(poolAddress,connection.getWeb3j(),connection.getCredentials(),provider);
-        return lendingPool.swapBorrowRateMode(assetAddress,BigInteger.ONE).send();
+        return lendingPool.swapBorrowRateMode(assetAddress,value).send();
     }
+
 
 }
