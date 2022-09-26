@@ -77,6 +77,19 @@ class LendingPoolTest {
     }
 
     @Test
+    void testWethGatewayWithDraw() {
+        WethGateway weth = new WethGateway(connection,"0x3bd3a20Ac9Ff1dda1D99C0dFCE6D65C4960B3627","2000000","3000000");
+//        WethGateway weth = new WethGateway(connection,"0x6cf3eeAAe068CB8087Ea9e857170f2Ba251F83bF","2000000","3000000");
+        TransactionReceipt wethReceipt = null;
+        try {
+            wethReceipt = weth.withdrawEth("0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e","1000000","0x4bd5643ac6f66a5237E18bfA7d47cF22f1c9F210");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        log.info("Weth Receipt -{}",wethReceipt);
+    }
+
+    @Test
     void lendingPoolDeposit() {
         Erc20 erc20 = new Erc20(connection,"2000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC");
 
