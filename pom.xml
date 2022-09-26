@@ -80,14 +80,6 @@
 						<bin>src/bin/generated</bin>
 						<abi>src/abi/generated</abi>
 					</outputDirectory>
-					<contract>
-						<includes>
-							<include>greeter</include>
-						</includes>
-						<excludes>
-							<exclude>mortal</exclude>
-						</excludes>
-					</contract>
 					<pathPrefixes>
 						<pathPrefix>dep=../dependencies</pathPrefix>
 					</pathPrefixes>
