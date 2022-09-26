@@ -164,4 +164,19 @@ class LendingPoolTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    void setUsageAsCollateral(){
+
+    }
+
+    @Test
+    void liquidationCall(){
+
+    }
+
+    @Test
+    void flashloans(){
+
+    }
 }
