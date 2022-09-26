@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.6.12;
 
-import "@openzeppelin/contracts/interfaces/IERC20.sol";
+import "./IERC20.sol";
 
 interface IWETHGateway {
     function depositETH(

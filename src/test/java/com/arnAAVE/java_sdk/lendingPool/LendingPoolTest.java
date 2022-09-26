@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -58,10 +59,28 @@ class LendingPoolTest {
         System.out.println("Transaction hash: " + erc20Receipt.getTransactionHash());
         System.out.println("The transaction address: " + erc20Receipt.getContractAddress());
         System.out.println("The gas used: " + erc20Receipt.getGasUsed());
+    }
+    @Test
+    void testTotalPoolSupply(){
+        Erc20 erc20 = new Erc20(connection,"2000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC");
 
-
+        try {
+            log.info("total balance -{}", erc20.supplyBalance());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    @Test
+    void testAddressPoolBalance(){
+        Erc20 erc20 = new Erc20(connection,"2000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC");
+
+        try {
+            log.info("Your balance -{}", erc20.balanceOf("0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     void testWethGateway() {
