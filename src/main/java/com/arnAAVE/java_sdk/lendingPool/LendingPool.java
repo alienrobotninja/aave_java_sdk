@@ -84,6 +84,14 @@ public class LendingPool {
         return lendingPool.repay(assetAddress,value,BigInteger.ONE,onBehalfOf).send();
     }
 
+    TransactionReceipt swapBorrowRate(String amount, String assetAddress, String onBehalfOf) throws Exception {
+        String poolAddress = lendingPoolAddress.getLendingPool().send();
+        BigInteger value = new BigInteger(amount);
+
+        ILendingPool lendingPool = ILendingPool.load(poolAddress,connection.getWeb3j(),connection.getCredentials(),provider);
+        return lendingPool.swapBorrowRateMode(assetAddress,BigInteger.ONE).send();
+    }
+
     public TransactionReceipt setUsageAsCollateral(String asset, Boolean useAsCollateral) throws Exception {
         String poolAddress = lendingPoolAddress.getLendingPool().send();
         BigInteger value = new BigInteger(asset);
