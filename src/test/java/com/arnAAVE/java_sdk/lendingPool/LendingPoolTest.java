@@ -22,7 +22,11 @@ class LendingPoolTest {
 
         connection = new AaveConnect(privateKey,nodeUrl);
 
-        lendingPool = new LendingPool(connection, "0x5E52dEc931FFb32f609681B8438A51c675cc232d","20000000","30000000");
+        try {
+            lendingPool = new LendingPool(connection, "0x5E52dEc931FFb32f609681B8438A51c675cc232d","20000000","30000000");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -61,14 +65,15 @@ class LendingPoolTest {
 
     @Test
     void testWethGateway() {
-//        WethGateway weth = new WethGateway(connection,"0x3bd3a20Ac9Ff1dda1D99C0dFCE6D65C4960B3627","2000000","3000000");
-        WethGateway weth = new WethGateway(connection,"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2","2000000","3000000");
-
+        WethGateway weth = new WethGateway(connection,"0x3bd3a20Ac9Ff1dda1D99C0dFCE6D65C4960B3627","2000000","3000000");
+//        WethGateway weth = new WethGateway(connection,"0x6cf3eeAAe068CB8087Ea9e857170f2Ba251F83bF","2000000","3000000");
+        TransactionReceipt wethReceipt = null;
         try {
-            weth.depositEth("0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e","0x4bd5643ac6f66a5237E18bfA7d47cF22f1c9F210");
+            wethReceipt = weth.depositEth("0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e","0x4bd5643ac6f66a5237E18bfA7d47cF22f1c9F210");
         } catch (Exception e) {
             e.printStackTrace();
         }
+        log.info("Weth Receipt -{}",wethReceipt);
     }
 
     @Test
