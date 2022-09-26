@@ -37,7 +37,7 @@ just get a testnet address from infura and you are good to go.
 * wrapper classes have been created using the v2 .sol contracts.
 * attempting to deposit on lending pool.
 * we require an approve method for deposit to go through still finding away around that.
-###lending pool contract
+  ###lending pool contract
 * deposit(``String reserve``,``BigInteger amount``,``String onBehalfOf``,``BigInteger referralCode``)
 
 
