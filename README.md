@@ -1,4 +1,4 @@
-# aaveJavaSdk
+<h1 align="center">Aave Java SDK</h1>
 
 
 ### prerequisite
@@ -37,8 +37,253 @@ just get a testnet address from infura and you are good to go.
 * wrapper classes have been created using the v2 .sol contracts.
 * attempting to deposit on lending pool.
 * we require an approve method for deposit to go through still finding away around that.
-###lending pool contract
+  ###lending pool contract
 * deposit(``String reserve``,``BigInteger amount``,``String onBehalfOf``,``BigInteger referralCode``)
 
 
 * please once again look in the test to understand how to use.
+
+# How to use
+
+[Lending Pool V2](#lending-pool-v2)
+- [deposit](#deposit)
+- [borrow](#borrow)
+- [repay](#repay)
+- [withdraw](#withdraw)
+- [swapBorrowRateMode](#swapBorrowRateMode)
+- [setUsageAsCollateral](#setUsageAsCollateral)
+- [liquidationCall](#liquidationCall)
+- [swapCollateral](#swapCollateral)
+- [repayWithCollateral](#repayWithCollateral)
+
+## Lending Pool V2
+
+Object that contains all the necessary methods to create Aave V2 lending pool
+transactions
+
+### deposit
+
+Deposits the underlying asset into the reserve. For every token that is
+deposited, a corresponding amount of aTokens is minted
+
+<details>
+  <summary>Sample Code</summary>
+
+```java
+/*
+- @param `assetAddress` The ethereum address of the reserve asset
+- @param `lendingPoolAddressProvider` lending pool address provider 
+- @param `amount` The amount to be deposited, in human readable units as strings (e.g. 25000000000 ETH) 
+- @param `interestRateMode`//Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate
+- @param `onBehalfOf` The ethereum address for which user is depositing.
+*/
+class LendingPoolTest {
+    //check that you are on the right network 
+    //NB kovan and other test nets are deprecated use Goerli
+    String nodeUrl 
+        = "https://goerli.infura.io/v3/<replace with your infura key>";
+    String privateKey 
+        = "<replace with your private key to your wallet>";
+    
+    private AaveConnect connection = new AaveConnect(privateKey, nodeUrl);
+    
+    private LendingPool lendingPool = new LendingPool(connection, lendingPoolAddressProvider, gasFee, gasLimit);
+
+    /* rest of your code... constructor...*/
+
+    void lendingPoolDeposit() {
+        Erc20 erc20 = new Erc20(connection, amount, assetAddress);
+
+        try {
+            erc20.approve(amount);
+            TransactionReceipt depositReceipt = lendingPool.deposit(amount, assetAddress, onBehalfOf);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       
+    }
+}
+```
+
+</details>
+
+<br />
+
+### borrow
+
+Borrow an `amount` of `reserve` asset.
+
+User must have a collaterised position (i.e. aTokens in their wallet)
+
+
+<details>
+  <summary>Sample Code</summary>
+
+```java
+/*
+- @param `assetAddress` The ethereum address of the reserve asset 
+- @param `amount` The amount to be borrowed, in human readable units as strings (e.g. 25000000000 ETH) 
+- @param `interestRateMode`//Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate
+- @param `lendingPoolAddressProvider` lending pool address provider 
+- @param `onBehalfOf` The ethereum address for which user is borrowing. It will default to the user address 
+*/
+
+class LendingPoolTest {
+    String nodeUrl
+        = "https://goerli.infura.io/v3/<replace with your infura key>";
+    String privateKey
+        = "<replace with your private key to your wallet>";
+
+    private AaveConnect connection = new AaveConnect(privateKey, nodeUrl);
+
+    private LendingPool lendingPool = new LendingPool(connection, lendingPoolAddressProvider, gasFee, gasLimit);
+
+    /* rest of your code... constructor...*/
+    
+    void lendingPoolWithdraw() {
+
+        try {
+            TransactionReceipt borrowReceipt =  lendingPool.borrow(amount, assetAddress, onBehalfOf);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+     }
+}
+
+```
+
+</details>
+
+<br />
+
+### repay
+
+Repays a borrow on the specific reserve, for the specified amount (or for the
+whole amount, if (-1) is specified). the target user is defined by `onBehalfOf`.
+If there is no repayment on behalf of another account, `onBehalfOf` must be
+equal to `user`
+
+If the `user` is not approved, an approval transaction will also be returned
+
+<details>
+  <summary>Sample Code</summary>
+
+```java
+/*
+- @param `assetAddress` The ethereum address of the reserve asset 
+- @param `amount` The amount to be borrowed, in human readable units as strings (e.g. 25000000000 ETH) 
+- @param `interestRateMode`//Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate
+- @param `lendingPoolAddressProvider` lending pool address provider 
+- @param `onBehalfOf` The ethereum address for which user is borrowing. It will default to the user address 
+*/
+
+class LendingPoolTest {
+    String nodeUrl
+        = "https://goerli.infura.io/v3/<replace with your infura key>";
+    String privateKey
+        = "<replace with your private key to your wallet>";
+
+    private AaveConnect connection = new AaveConnect(privateKey, nodeUrl);
+
+    private LendingPool lendingPool = new LendingPool(connection, lendingPoolAddressProvider, gasFee, gasLimit);
+
+    /* rest of your code... constructor...*/
+    
+    void lendingPoolWithdraw() {
+
+        try {
+            TransactionReceipt repayReceipt =  lendingPool.repay(amount, assetAddress, onBehalfOf);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+     }
+}
+
+```
+
+</details>
+
+<br />
+
+### withdraw
+
+Withdraws the underlying asset of an aToken asset.
+
+<details>
+  <summary>Sample Code</summary>
+
+```java
+/*
+- @param `assetAddress` The ethereum address of the reserve asset 
+- @param `amount` The amount to be withdrawn, in human readable units as strings (e.g. 25000000000 ETH) 
+- @param `interestRateMode`//Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate
+- @param `lendingPoolAddressProvider` lending pool address provider 
+- @param `toAddress` The ethereum address for which user is borrowing. It will default to the user address 
+*/
+
+class LendingPoolTest {
+    String nodeUrl
+        = "https://goerli.infura.io/v3/<replace with your infura key>";
+    String privateKey
+        = "<replace with your private key to your wallet>";
+
+    private AaveConnect connection = new AaveConnect(privateKey, nodeUrl);
+
+    private LendingPool lendingPool = new LendingPool(connection, lendingPoolAddressProvider, gasFee, gasLimit);
+
+    /* rest of your code... constructor...*/
+
+    void lendingPoolWithdraw() {
+
+        try {
+            TransactionReceipt withDrawReceipt =  lendingPool.withdraw(amount, assetAddress, toAdderess);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+}
+```
+
+</details>
+
+<br />
+
+### swapBorrowRateMode
+
+Borrowers can use this function to swap between stable and variable borrow rate
+modes.
+
+<details>
+  <summary>Sample Code</summary>
+
+```java
+/*
+- @param `assetAddress` The address of the reserve on which the user borrowed 
+- @param `mode` //Whether the borrow will incur a stable (InterestRate.Stable) or variable (InterestRate.Variable) interest rate which is either "1" for stable or "2" for variable
+*/
+class LendingPoolTest {
+    String nodeUrl
+        = "https://goerli.infura.io/v3/<replace with your infura key>";
+    String privateKey
+        = "<replace with your private key to your wallet>";
+
+    private AaveConnect connection = new AaveConnect(privateKey, nodeUrl);
+
+    private LendingPool lendingPool = new LendingPool(connection, lendingPoolAddressProvider, gasFee, gasLimit);
+
+    /* rest of your code... constructor...*/
+
+    void swapBorrowRate() {
+        try {
+            TransactionReceipt swapBorrowRateReceipt =  lendingPool.swapBorrowRate(assetAddress, mode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+</details>
+
+<br />
