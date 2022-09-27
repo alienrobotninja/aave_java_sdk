@@ -74,5 +74,4 @@ public class LendingPool {
         return lendingPool.swapBorrowRateMode(assetAddress,value).send();
     }
 
-
 }
