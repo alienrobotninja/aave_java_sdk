@@ -39,16 +39,16 @@ class LendingPoolTest {
 //        System.out.println("Client version " + connection.getClientVersion());
         assertTrue(connection.getClientVersion().contains("Geth"));
     }
-    @Test
-    void protocolDataProvider(){
-        ProtocolDataProvider dataProvider = new ProtocolDataProvider(connection,"0x5E52dEc931FFb32f609681B8438A51c675cc232d","2000000");
-
-        try {
-            System.out.println(dataProvider.getAllATokens());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    @Test
+//    void protocolDataProvider(){
+//        ProtocolDataProvider dataProvider = new ProtocolDataProvider(connection,"0x5E52dEc931FFb32f609681B8438A51c675cc232d","2000000");
+//
+//        try {
+//            System.out.println(dataProvider.getAllATokens());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Test
     void testApprove(){

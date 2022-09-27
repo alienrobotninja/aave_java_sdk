@@ -15,15 +15,11 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class WethGateway {
-    private final AaveConnect connection;
 
-    private final String assetAddress;
-    private IWETHGateway weth;
+    private final IWETHGateway weth;
 
     public WethGateway(AaveConnect connection, String assetAddress, String gasFee, String gasLimit) {
-        this.connection = connection;
         ContractGasProvider provider = new StaticGasProvider(new BigInteger(gasFee),new BigInteger(gasLimit));
-        this.assetAddress = assetAddress;
         weth = new IWETHGateway(assetAddress,connection.getWeb3j(),connection.getCredentials(),provider);
     }
 
