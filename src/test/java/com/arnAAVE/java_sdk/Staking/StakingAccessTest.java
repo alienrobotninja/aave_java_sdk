@@ -1,5 +1,6 @@
 package com.arnAAVE.java_sdk.Staking;
 
+import com.arnAAVE.java_sdk.lendingPool.AaveConnect;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Slf4j
 class StakingAccessTest {
-
-    @Autowired
-    StakingAccess stakingAccess;
+    AaveConnect connection = new AaveConnect("1238370fb9507a697d2744d9c511061a0c3cc284eba1af1fa7b24854a9084219","https://goerli.infura.io/v3/4b08a7529c7a4a24af5d26ce1fe16aca");
+    StakingAccess stakingAccess = new StakingAccess(connection,"","2000000","3000000");
 
     @BeforeEach
     void setUp() {
@@ -25,19 +25,34 @@ class StakingAccessTest {
 
     @Test
     void claimRewards() {
-        RemoteFunctionCall<TransactionReceipt> receipt = stakingAccess.claimRewards("0x16b72adab628d8762a25f707acbfe9c170d9001d", new BigInteger("2000000"));
+        TransactionReceipt receipt = null;
+        try {
+            receipt = stakingAccess.claimRewards("0x16b72adab628d8762a25f707acbfe9c170d9001d", new BigInteger("2000000"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         log.info("receipt: " + receipt);
     }
 
     @Test
     void stake() {
-        RemoteFunctionCall<TransactionReceipt> receipt = stakingAccess.stake("0x16b215977114756b17f8c1a7b989d6061a1cae8e", new BigInteger("2000000"));
+        TransactionReceipt receipt = null;
+        try {
+            receipt = stakingAccess.stake("0x16b215977114756b17f8c1a7b989d6061a1cae8e", new BigInteger("2000000"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         log.info("receipt: " + receipt);
     }
 
     @Test
     void redeem() {
-        RemoteFunctionCall<TransactionReceipt> receipt = stakingAccess.redeem("0x16b215977114756b17f8c1a7b989d6061a1cae8e", new BigInteger("2000000"));
+        TransactionReceipt receipt = null;
+        try {
+            receipt = stakingAccess.redeem("0x16b215977114756b17f8c1a7b989d6061a1cae8e", new BigInteger("2000000"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         log.info("receipt: " + receipt);
     }
 }

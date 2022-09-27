@@ -5,10 +5,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 @Slf4j
 class LendingPoolTest {
@@ -56,19 +59,20 @@ class LendingPoolTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Transaction hash: " + erc20Receipt.getTransactionHash());
-        System.out.println("The transaction address: " + erc20Receipt.getContractAddress());
-        System.out.println("The gas used: " + erc20Receipt.getGasUsed());
+        assertTrue(erc20Receipt.isStatusOK());
     }
+
     @Test
     void testTotalPoolSupply(){
         Erc20 erc20 = new Erc20(connection,"2000000","0xCCa7d1416518D095E729904aAeA087dBA749A4dC");
 
         try {
-            log.info("total balance -{}", erc20.supplyBalance());
+            var total = erc20.supplyBalance();
+            assertEquals(total.compareTo(BigInteger.valueOf(10000000)),1);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     @Test
@@ -88,11 +92,12 @@ class LendingPoolTest {
 //        WethGateway weth = new WethGateway(connection,"0x6cf3eeAAe068CB8087Ea9e857170f2Ba251F83bF","2000000","3000000");
         TransactionReceipt wethReceipt = null;
         try {
-            wethReceipt = weth.depositEth("0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e","0x4bd5643ac6f66a5237E18bfA7d47cF22f1c9F210");
+            wethReceipt = weth.depositEth("0xeB538049D10e62ca319c9fF0c9FFF18bF2Ad968e","0x4bd5643ac6f66a5237E18bfA7d47cF22f1c9F210","100000");
         } catch (Exception e) {
             e.printStackTrace();
         }
         log.info("Weth Receipt -{}",wethReceipt);
+
     }
 
     @Test
@@ -106,6 +111,7 @@ class LendingPoolTest {
             e.printStackTrace();
         }
         log.info("Weth Receipt -{}",wethReceipt);
+        assertTrue(wethReceipt.isStatusOK());
     }
 
     @Test
@@ -127,9 +133,7 @@ class LendingPoolTest {
             e.printStackTrace();
         }
 
-        log.info("Deposit hash: " + depositReceipt.getTransactionHash());
-        log.info("Deposit address: " + depositReceipt.getContractAddress());
-        log.info("Deposit gas used: " + depositReceipt.getGasUsed());
+        assertTrue(depositReceipt.isStatusOK());
     }
 
     @Test
@@ -141,9 +145,7 @@ class LendingPoolTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Transaction hash: " + withDrawReceipt.getTransactionHash());
-        System.out.println("The transaction address: " + withDrawReceipt.getContractAddress());
-        System.out.println("The gas used: " + withDrawReceipt.getGasUsed());
+        assertTrue(withDrawReceipt.isStatusOK());
     }
 
 
@@ -156,8 +158,8 @@ class LendingPoolTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(borrowReceipt.getTransactionHash());
-//        assertTrue();
+
+        assertTrue(borrowReceipt.isStatusOK());
     }
 
     @Test
@@ -169,7 +171,7 @@ class LendingPoolTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(repayReceipt.getTransactionHash());
+        assertTrue(repayReceipt.isStatusOK());
     }
 
     @Test
@@ -181,7 +183,7 @@ class LendingPoolTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(rateReceipt.getTransactionHash());
+        assertTrue(rateReceipt.isStatusOK());
     }
 
     @Test
