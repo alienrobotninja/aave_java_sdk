@@ -9,6 +9,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 
+import java.awt.geom.Point2D;
 import java.math.BigInteger;
 import java.util.List;
 
