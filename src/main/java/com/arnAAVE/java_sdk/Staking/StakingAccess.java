@@ -1,6 +1,7 @@
 package com.arnAAVE.java_sdk.Staking;
 
 import com.arnAAVE.java_sdk.contractModels.IStakedToken;
+import com.arnAAVE.java_sdk.lendingPool.AaveConnect;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteFunctionCall;
@@ -13,14 +14,14 @@ import java.math.BigInteger;
 
 public class StakingAccess {
 
-    private static final Web3j web3j = Web3j.build(new HttpService(
-            "https://goerli.infura.io/v3/b8c7cedb8701445bb9210f4731e42c0a"));
-    private static final Credentials credentials = Credentials.create("1238370fb9507a697d2744d9c511061a0c3cc284eba1af1fa7b24854a9084219");
 
-    private ContractGasProvider provider = new StaticGasProvider(new BigInteger("2000000"), new BigInteger("2000000"));
+    private IStakedToken iStakedToken;
 
-    private IStakedToken iStakedToken = new IStakedToken("", web3j, credentials, provider);
 
+    public StakingAccess(AaveConnect connection, String iStakedTokenAddress, String gasFee, String gasLimit) {
+        ContractGasProvider provider = new StaticGasProvider(new BigInteger(gasFee), new BigInteger(gasLimit));
+        this.iStakedToken = new IStakedToken(iStakedTokenAddress, connection.getWeb3j(), connection.getCredentials(),provider);
+    }
 
     public RemoteFunctionCall<String> staked_token(){
         return iStakedToken.STAKED_TOKEN();
