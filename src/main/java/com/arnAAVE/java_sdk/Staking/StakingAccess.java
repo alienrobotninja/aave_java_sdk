@@ -12,8 +12,8 @@ public class StakingAccess {
     private final IStakedToken iStakedToken;
 
     public StakingAccess(AaveConnect connection, String iStakedTokenAddress, String gasFee, String gasLimit) {
-        ContractGasProvider provider = new StaticGasProvider(new BigInteger(gasFee),new BigInteger(gasLimit));
-        this.iStakedToken = new IStakedToken(iStakedTokenAddress, connection.getWeb3j(), connection.getCredentials(), provider);
+        ContractGasProvider provider = new StaticGasProvider(new BigInteger(gasFee), new BigInteger(gasLimit));
+        this.iStakedToken = new IStakedToken(iStakedTokenAddress, connection.getWeb3j(), connection.getCredentials(),provider);
     }
 
     public String staked_token() throws Exception {
