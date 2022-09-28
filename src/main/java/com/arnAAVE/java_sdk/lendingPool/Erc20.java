@@ -9,18 +9,27 @@ import java.math.BigInteger;
 public class Erc20 {
     private final AaveConnect connection;
 
-    private final ContractGasProvider provider;
-    private final String assetAddress;
+    private final IERC20 erc20;
 
     public Erc20(AaveConnect connection, String gasFee, String assetAddress) {
         this.connection = connection;
-        this.provider = new StaticGasProvider(new BigInteger(gasFee),new BigInteger("3000000"));
-        this.assetAddress = assetAddress;
+        ContractGasProvider provider = new StaticGasProvider(new BigInteger(gasFee),new BigInteger("3000000"));
+        this.erc20 = new IERC20(assetAddress, connection.getWeb3j(), connection.getCredentials(), provider);
+
     }
 
     public TransactionReceipt approve(String amount) throws Exception {
-        IERC20 erc20 = new IERC20(assetAddress,connection.getWeb3j(),connection.getCredentials(),provider);
 
         return erc20.approve(connection.getCredentials().getAddress(),new BigInteger(amount)).send();
+    }
+
+    public BigInteger supplyBalance() throws Exception {
+
+        return erc20.totalSupply().send();
+    }
+
+    public BigInteger balanceOf(String address) throws Exception {
+
+        return erc20.balanceOf(address).send();
     }
 }

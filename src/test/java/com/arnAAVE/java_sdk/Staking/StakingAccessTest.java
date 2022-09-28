@@ -29,19 +29,34 @@ class StakingAccessTest {
 
     @Test
     void claimRewards() {
-        RemoteFunctionCall<TransactionReceipt> receipt = stakingAccess.claimRewards("0x16b72adab628d8762a25f707acbfe9c170d9001d", new BigInteger("2000000"));
+        TransactionReceipt receipt = null;
+        try {
+            receipt = stakingAccess.claimRewards("0x16b72adab628d8762a25f707acbfe9c170d9001d", new BigInteger("2000000"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         log.info("receipt: " + receipt);
     }
 
     @Test
     void stake() {
-        RemoteFunctionCall<TransactionReceipt> receipt = stakingAccess.stake("0x16b215977114756b17f8c1a7b989d6061a1cae8e", new BigInteger("2000000"));
+        TransactionReceipt receipt = null;
+        try {
+            receipt = stakingAccess.stake("0x16b215977114756b17f8c1a7b989d6061a1cae8e", new BigInteger("2000000"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         log.info("receipt: " + receipt);
     }
 
     @Test
     void redeem() {
-        RemoteFunctionCall<TransactionReceipt> receipt = stakingAccess.redeem("0x16b215977114756b17f8c1a7b989d6061a1cae8e", new BigInteger("2000000"));
+        TransactionReceipt receipt = null;
+        try {
+            receipt = stakingAccess.redeem("0x16b215977114756b17f8c1a7b989d6061a1cae8e", new BigInteger("2000000"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         log.info("receipt: " + receipt);
     }
 }
